@@ -43,7 +43,7 @@
 		</dict>
 	</dict>
 	<key>Description</key>
-	<string>Add "Save to instapaper" to context menu</string>
+	<string>Add "Send to Instapaper" to context menu</string>
 	<key>ExtensionInfoDictionaryVersion</key>
 	<string>1.0</string>
 	<key>Permissions</key>
