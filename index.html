@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Instapaper Menu</title>
+<script type="text/javascript">
+
+function performCommand(evt) {
+
+	var data, username, newpassword;
+    if (evt.command === "send-to-instapaper") {
+    	if(evt.userInfo.url) {
+    		var myRequest = new XMLHttpRequest();
+    		myRequest.open("POST", "https://www.instapaper.com/api/add");
+    		myRequest.onload = function(){
+    			// TODO send msg to injected script to create a notification
+    			console.log("success!");
+    			console.log(this);
+
+    		};
+    		username = safari.extension.settings.username;
+    		if(!username) {
+    			username = prompt("Please enter your Instapaper user name", "");
+    			if(!username) {
+    				return;
+    			}
+    			safari.extension.settings.username = username;
+    			// If the username was not set previously, it's probable that we need a password, so we request it
+    			if(!safari.extension.settings.password && (newpassword = prompt("Please enter your Instapaper password (leave blank if you have no password)"))) {
+	    			safari.extension.settings.password = newpassword;
+	    		} 	
+    		}
+    		data = new FormData();
+    		data.append("username", username);
+    		if(safari.extension.settings.password) {
+    			data.append("password", safari.extension.settings.password); 	
+    		} 
+    		data.append("url", evt.userInfo.url);
+    		myRequest.send(data);
+    	}
+    }
+}
+
+safari.application.addEventListener("command", performCommand, false);
+
+</script>
+</head>
+<body>Instapaper Menu</body>
+</html>
