@@ -6,16 +6,29 @@
 
 function performCommand(evt) {
 
-	var data, username, newpassword;
+	var data, username, newpassword, msg, title, note;
     if (evt.command === "send-to-instapaper") {
     	if(evt.userInfo.url) {
     		var myRequest = new XMLHttpRequest();
     		myRequest.open("POST", "https://www.instapaper.com/api/add");
     		myRequest.onload = function(){
-    			// TODO send msg to injected script to create a notification
-    			console.log("success!");
-    			console.log(this);
-
+    			if(this.status == 201) {
+    				title = "Success";
+    				msg = "Page was saved.";
+    			}
+    			else if(this.status == 403) {
+    				title = "Authentication Error";
+    				msg = "Wrong authentication data for Instapaper. Please check extension settings.";
+    			}
+    			else if(this.status == 500) {
+    				title = "Instapaper Server Error";
+    				msg = "Page could not be saved due to an error on the Instapaper server. Please try again later."
+    			}
+    			else {
+    				title = "Internal error";
+    				msg = "Ooops, an internal error occured. You should never see a status of '" + this.status +"'.";
+    			}
+    			note = new Notification(title, { body: msg, tag:evt.userInfo.url });
     		};
     		username = safari.extension.settings.username;
     		if(!username) {

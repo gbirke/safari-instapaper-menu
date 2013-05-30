@@ -1,6 +1,6 @@
-document.addEventListener("contextmenu", handleMessage, false);
+document.addEventListener("contextmenu", handleContextEvent, false);
 
-function handleMessage(evt) {
+function handleContextEvent(evt) {
 	var userInfo, link = evt.target;;
 	if(link.nodeType == 3) {
 		link = link.parentNode;
